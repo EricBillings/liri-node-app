@@ -3,15 +3,15 @@ require("dotenv").config();
 const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
 const spotify = new Spotify(keys.spotify);
+const axios = require("axios");
 
 
 const commandType = process.argv[2];
 
 let userSelection;
 
-console.log(userSelection);
 
-
+/*search for song using spotify api*/
 if (commandType === "spotify-this-song") {
     userSelection = process.argv.slice(3).join(" ");
     if (process.argv.length < 4) {
@@ -35,3 +35,36 @@ if (commandType === "spotify-this-song") {
             console.log(err);
         });
 }
+
+/*search for movie info using OMDB api*/
+if (commandType === "movie-this") {
+    userSelection = process.argv.slice(3).join(" ");
+    if (process.argv.length < 4) {
+        userSelection = "Mr. Nobody"
+    } else {
+        userSelection = process.argv.slice(3).join(" ");
+    };
+
+    let queryURL = "https://www.omdbapi.com/?t=" + userSelection + "&apikey=trilogy";
+
+    axios({
+        method: 'get',
+        url: queryURL,
+    })
+        .then(function (response) {
+            let movieInfo = {
+                title: response.data.Title,
+                year: response.data.Year,
+                IMDBating: response.data.imdbRating,
+                RottenTomatoRating: response.data.Ratings[1].Value,
+                Country: response.data.Country,
+                Language: response.data.Language,
+                Plot: response.data.Plot,
+                Actors: response.data.Actors
+            }
+            console.log(movieInfo);
+        });
+
+
+
+};
