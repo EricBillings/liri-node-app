@@ -7,14 +7,20 @@ const spotify = new Spotify(keys.spotify);
 
 const commandType = process.argv[2];
 
-const userSelection = process.argv.slice(3).join(" ");
+let userSelection;
 
 console.log(userSelection);
 
 
 if (commandType === "spotify-this-song") {
+    userSelection = process.argv.slice(3).join(" ");
+    if (process.argv.length < 4) {
+        userSelection = "The Sign Ace of Base"
+    } else {
+        userSelection = process.argv.slice(3).join(" ");
+    };
     spotify
-        .search({ type: 'track', query: userSelection, limit: 1  })
+        .search({ type: 'track', query: userSelection, limit: 1 })
         .then(function (response) {
             let musicInfo = {
                 artist: response.tracks.items[0].album.artists[0].name,
@@ -23,7 +29,7 @@ if (commandType === "spotify-this-song") {
                 album: response.tracks.items[0].album.name
             };
 
-                console.log(JSON.stringify(musicInfo, "", 2));
+            console.log(JSON.stringify(musicInfo, "", 2));
         })
         .catch(function (err) {
             console.log(err);
