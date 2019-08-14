@@ -4,9 +4,10 @@ const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
 const spotify = new Spotify(keys.spotify);
 const axios = require("axios");
+const fs = require("fs");
 
 
-const commandType = process.argv[2];
+let commandType = process.argv[2];
 
 let userSelection;
 
@@ -29,7 +30,7 @@ if (commandType === "spotify-this-song") {
                 album: response.tracks.items[0].album.name
             };
 
-            console.log(JSON.stringify(musicInfo, "", 2));
+            console.log(musicInfo);
         })
         .catch(function (err) {
             console.log(err);
@@ -65,6 +66,18 @@ if (commandType === "movie-this") {
             console.log(movieInfo);
         });
 
+};
 
+if (commandType === "do-what-it-says") {
+    command = fs.readFile("random.txt", "utf8", function (err, data){
+        if (err) {
+            console.log(err);
+        }
+        let dataArr = data.split(",");
+        commandType = dataArr[0];
+        userSelection = dataArr[1].slice(1, (dataArr[1].length - 1));
+        console.log(commandType);
+        console.log(userSelection);
+    });
 
 };
