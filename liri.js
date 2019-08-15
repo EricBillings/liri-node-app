@@ -32,7 +32,7 @@ switch (commandType) {
         break;
 
     default:
-        command = fs.readFile("random.txt", "utf8", function (err, data) {
+        command = fs.readFile("./random.txt", "utf8", function (err, data) {
             if (err) {
                 console.log(err);
             }
@@ -50,6 +50,7 @@ switch (commandType) {
                     checkSpotify();
                     break;
                 default:
+                    logFile();
                     console.log("Command Unknown")
             }
 
@@ -80,6 +81,7 @@ function checkMovie() {
                 Plot: response.data.Plot,
                 Actors: response.data.Actors
             }
+            logFile();
             console.log(movieInfo);
         });
 
@@ -97,10 +99,22 @@ function checkSpotify() {
                 link: response.tracks.items[0].external_urls.spotify,
                 album: response.tracks.items[0].album.name
             };
-
+            logFile();
             console.log(musicInfo);
+
         })
         .catch(function (err) {
             console.log(err);
         });
 }
+
+function logFile() {
+    const time = Date.now();
+
+    fs.appendFile("./log.txt", "\n" + time + " " + commandType + " " + userSelection, "utf8", function (err) {
+        if (err) throw err;
+        console.log("Data is appended to file successfully.")
+
+
+    })
+};
