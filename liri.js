@@ -12,51 +12,54 @@ let commandType = process.argv[2];
 let userSelection;
 
 
-/*search for song using spotify api*/
-if (commandType === "spotify-this-song") {
-    if (process.argv.length < 4) {
-        userSelection = "The Sign Ace of Base"
-    } else {
-        userSelection = process.argv.slice(3).join(" ");
-    };
-    checkSpotify();
-
-};
-
-/*search for movie info using OMDB api*/
-if (commandType === "movie-this") {
-    if (process.argv.length < 4) {
-        userSelection = "Mr. Nobody"
-    } else {
-        userSelection = process.argv.slice(3).join(" ");
-    };
-    checkMovie();
-
-};
-
-
-if (commandType === "do-what-it-says") {
-    command = fs.readFile("random.txt", "utf8", function (err, data) {
-        if (err) {
-            console.log(err);
-        }
-        let dataArr = data.split(",");
-        commandType = dataArr[0];
-        userSelection = dataArr[1].slice(1, (dataArr[1].length - 1));
-        console.log(commandType);
-        console.log(userSelection);
-        
-        if (commandType === "movie-this") {
-            checkMovie();
-
-        } else if (commandType === "spotify-this-song") {
-            checkSpotify();
+switch (commandType) {
+    case "movie-this":
+        if (process.argv.length < 4) {
+            userSelection = "Mr. Nobody"
         } else {
-            console.log("Command Unknown");
-        }
+            userSelection = process.argv.slice(3).join(" ");
+        };
+        checkMovie();
+        break;
+    case "spotify-this-song":
+        if (process.argv.length < 4) {
+            userSelection = "The Sign Ace of Base"
+        } else {
+            userSelection = process.argv.slice(3).join(" ");
+        };
 
-    })
-};
+        checkSpotify();
+        break;
+
+    default:
+        command = fs.readFile("random.txt", "utf8", function (err, data) {
+            if (err) {
+                console.log(err);
+            }
+            let dataArr = data.split(",");
+            commandType = dataArr[0];
+            userSelection = dataArr[1].slice(1, (dataArr[1].length - 1));
+            console.log(commandType);
+            console.log(userSelection);
+
+            switch (commandType) {
+                case "movie-this":
+                    checkMovie();
+                    break;
+                case "spotify-this-song":
+                    checkSpotify();
+                    break;
+                default:
+                    console.log("Command Unknown")
+            }
+
+
+        });
+
+}
+
+
+
 
 
 function checkMovie() {
