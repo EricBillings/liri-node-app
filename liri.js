@@ -14,38 +14,52 @@ let userSelection;
 
 /*search for song using spotify api*/
 if (commandType === "spotify-this-song") {
-    userSelection = process.argv.slice(3).join(" ");
     if (process.argv.length < 4) {
         userSelection = "The Sign Ace of Base"
     } else {
         userSelection = process.argv.slice(3).join(" ");
     };
-    spotify
-        .search({ type: 'track', query: userSelection, limit: 1 })
-        .then(function (response) {
-            let musicInfo = {
-                artist: response.tracks.items[0].album.artists[0].name,
-                song: response.tracks.items[0].name,
-                link: response.tracks.items[0].external_urls.spotify,
-                album: response.tracks.items[0].album.name
-            };
+    checkSpotify();
 
-            console.log(musicInfo);
-        })
-        .catch(function (err) {
-            console.log(err);
-        });
-}
+};
 
 /*search for movie info using OMDB api*/
 if (commandType === "movie-this") {
-    userSelection = process.argv.slice(3).join(" ");
     if (process.argv.length < 4) {
         userSelection = "Mr. Nobody"
     } else {
         userSelection = process.argv.slice(3).join(" ");
     };
+    checkMovie();
 
+};
+
+
+if (commandType === "do-what-it-says") {
+    command = fs.readFile("random.txt", "utf8", function (err, data) {
+        if (err) {
+            console.log(err);
+        }
+        let dataArr = data.split(",");
+        commandType = dataArr[0];
+        userSelection = dataArr[1].slice(1, (dataArr[1].length - 1));
+        console.log(commandType);
+        console.log(userSelection);
+        
+        if (commandType === "movie-this") {
+            checkMovie();
+
+        } else if (commandType === "spotify-this-song") {
+            checkSpotify();
+        } else {
+            console.log("Command Unknown");
+        }
+
+    })
+};
+
+
+function checkMovie() {
     let queryURL = "https://www.omdbapi.com/?t=" + userSelection + "&apikey=trilogy";
 
     axios({
@@ -66,18 +80,24 @@ if (commandType === "movie-this") {
             console.log(movieInfo);
         });
 
-};
+}
 
-if (commandType === "do-what-it-says") {
-    command = fs.readFile("random.txt", "utf8", function (err, data){
-        if (err) {
+
+function checkSpotify() {
+
+    spotify
+        .search({ type: 'track', query: userSelection, limit: 1 })
+        .then(function (response) {
+            let musicInfo = {
+                artist: response.tracks.items[0].album.artists[0].name,
+                song: response.tracks.items[0].name,
+                link: response.tracks.items[0].external_urls.spotify,
+                album: response.tracks.items[0].album.name
+            };
+
+            console.log(musicInfo);
+        })
+        .catch(function (err) {
             console.log(err);
-        }
-        let dataArr = data.split(",");
-        commandType = dataArr[0];
-        userSelection = dataArr[1].slice(1, (dataArr[1].length - 1));
-        console.log(commandType);
-        console.log(userSelection);
-    });
-
-};
+        });
+}
