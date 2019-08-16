@@ -6,6 +6,6 @@ exports.spotify = {
 
 
 exports.omdb = {
-  apikey: "trilogy"
+  apikey: process.env.omdb
   
 };
