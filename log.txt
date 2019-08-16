@@ -1,5 +1,9 @@
 Command log:
 
-movie-this the matrix
-1565875254675movie-this the matrix
-1565875277582 movie-this the matrix
+August 15th 2019, 9:33:07 am movie-this the matrix
+August 15th 2019, 9:33:34 am movie-this Tombstone
+August 15th 2019, 9:34:37 am movie-this Tombstone
+August 15th 2019, 7:56:02 pm movie-this pretty woman
+August 15th 2019, 7:56:32 pm spotify-this-song more than a feeling
+August 15th 2019, 8:16:25 pm spotify-this-song more than a feeling
+August 15th 2019, 8:25:30 pm spotify-this-song more than a feeling
