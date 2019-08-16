@@ -41,10 +41,13 @@ switch (commandType) {
         break;
 
     case "do-what-it-says":
+        logFile();
         readFile();
         break;
 
     default:
+        logFile();
+
         inquirer
             .prompt([
                 {
@@ -145,7 +148,6 @@ function logFile() {
 
     fs.appendFile("./log.txt", "\n" + time + " " + commandType + " " + userSelection, "utf8", function (err) {
         if (err) throw err;
-        console.log("Data is appended to file successfully.")
 
 
     })
